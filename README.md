@@ -2,17 +2,27 @@
 
 A [CanvasTTY](https://github.com/howdeploy/CanvasTTY) HOME widget that shows
 whether your local **Hermes Agent dashboard** (default `http://127.0.0.1:9119/`)
-is running, **starts it** if it is not, and opens it in your default browser.
+is running, **starts it** if it is not, and opens it **inside CanvasTTY**
+as an embedded browser card on the canvas.
 
 ## Features
 
-- Live status dot (online / offline / checking) — polls `127.0.0.1:9119` every 5 s
+- Live status dot (online / offline / checking) — polls the local helper
+  every 5 s
 - **"Start" button** — launches `hermes dashboard` through the local helper
-  service (see below), waits until it is ready, then you can open it
-- "Open Dashboard" button — opens the dashboard in your default browser
+  service (see below), waits until it is ready
+- **"In CanvasTTY" button** — opens the dashboard in CanvasTTY's own embedded
+  browser as a canvas card, next to your terminals (requires the
+  `browser.open` plugin SDK method — see below)
 - Follows CanvasTTY locale (ru/en) and palette
 - Sandboxed: no Node.js access, only CanvasTTY plugin SDK permissions
-  (`external:open` + `network`)
+
+## Requirements
+
+- CanvasTTY build with the `browser.open` plugin SDK method
+  (PR: https://github.com/howdeploy/CanvasTTY/pull/15)
+- Hermes Agent installed locally (`hermes` CLI in PATH or the standard venv)
+- The local helper running (for the Start button)
 
 ## How the "Start" button works
 
@@ -22,8 +32,8 @@ to a tiny local helper: `helper/hermes-dashboard-helper.py`.
 - The helper listens on **127.0.0.1:9210** (loopback only).
 - `POST /start` requires the header `X-Hermes-Token` — a random token stored in
   `~/.config/hermes-dashboard-helper/token` (created on first run, `chmod 600`).
-- The widget reads that token from its own isolated plugin storage
-  (`storage` permission) and calls the helper when you press **Start**.
+- The widget fetches that token via `GET /token` and persists it in its own
+  plugin storage, then calls the helper when you press **Start**.
 
 ### Install the helper
 
@@ -58,13 +68,6 @@ EOF
    ```
 3. Confirm the permissions (`external:open`, `network`, `storage`) and install.
 4. Add the widget on HOME under **Settings → Appearance → HOME composition**.
-
-## Requirements
-
-- Hermes Agent installed locally (`hermes` CLI in PATH or the standard venv).
-- The helper running (for the Start button).
-- The widget only **opens** the dashboard in your default browser — CanvasTTY's
-  embedded browser stays untouched.
 
 ## Development
 

@@ -7,7 +7,6 @@ const POLL_MS = 5_000;
 const dot = document.querySelector("#dot");
 const statusEl = document.querySelector("#status");
 const detailEl = document.querySelector("#detail");
-const openButton = document.querySelector("#open");
 const startButton = document.querySelector("#start");
 const embedButton = document.querySelector("#embed");
 const widget = document.querySelector("#widget");
@@ -60,10 +59,6 @@ async function loadToken() {
   }
   render();
 }
-
-openButton.addEventListener("click", () => {
-  void host.request("external.open", { url: DASHBOARD_URL });
-});
 
 embedButton.addEventListener("click", () => {
   embedButton.disabled = true;
@@ -140,23 +135,19 @@ function render() {
 
   if (state === "online") {
     detailEl.textContent = locale === "ru" ? "Дашборд запущен" : "Dashboard is running";
-    openButton.disabled = false;
     embedButton.disabled = false;
     startButton.hidden = true;
   } else if (state === "offline") {
     detailEl.textContent = locale === "ru" ? "Дашборд не запущен" : "Dashboard is not running";
-    openButton.disabled = true;
     embedButton.disabled = true;
     startButton.hidden = false;
     startButton.disabled = false;
   } else {
     detailEl.textContent = locale === "ru" ? "Проверка…" : "Checking…";
-    openButton.disabled = true;
     embedButton.disabled = true;
     startButton.hidden = true;
   }
 
-  openButton.textContent = locale === "ru" ? "Открыть" : "Open";
   embedButton.textContent = locale === "ru" ? "В CanvasTTY" : "In CanvasTTY";
   startButton.textContent = locale === "ru" ? "Запустить" : "Start";
 }
