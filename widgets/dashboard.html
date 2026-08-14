@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./dashboard.css">
+    <title>Hermes Dashboard</title>
+  </head>
+  <body>
+    <main class="surface hermes-widget" id="widget">
+      <div class="hermes-widget__head">
+        <span class="hermes-dot" id="dot" data-state="unknown" aria-hidden="true"></span>
+        <p class="eyebrow">Hermes</p>
+      </div>
+      <div class="hermes-widget__status" id="status">…</div>
+      <p class="state-message" id="detail">Checking dashboard…</p>
+      <button class="hermes-open" id="open" type="button" disabled>Open Dashboard</button>
+    </main>
+    <script src="canvastty-plugin://host/sdk.js"></script>
+    <script src="./dashboard.js"></script>
+  </body>
+</html>
