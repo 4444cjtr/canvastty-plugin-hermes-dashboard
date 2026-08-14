@@ -138,6 +138,10 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"running": dashboard_alive(), "url": DASHBOARD_URL})
         elif self.path == "/health":
             self._json(200, {"ok": True})
+        elif self.path == "/token":
+            # Отдаём токен виджету плагина. Безопасно: helper слушает только
+            # loopback, а локальный процесс и так имеет доступ к файлу токена.
+            self._json(200, {"token": _TOKEN})
         else:
             self._json(404, {"error": "not found"})
 

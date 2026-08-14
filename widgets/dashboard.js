@@ -22,12 +22,40 @@ host.onContext((context) => {
   void refresh();
 });
 
-// Читаем токен helper из изолированного хранилища плагина
+// Читаем токен helper из изолированного хранилища плагина;
+// если его нет — запрашиваем у helper (GET /token) и сохраняем.
 async function loadToken() {
   try {
     helperToken = await host.storage.get(TOKEN_KEY);
   } catch {
     helperToken = null;
+  }
+  if (helperToken) {
+    render();
+    return;
+  }
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2_000);
+    let response;
+    try {
+      response = await fetch(HELPER_URL + "token", {
+        method: "GET",
+        cache: "no-store",
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (response.ok) {
+      const data = await response.json();
+      if (data && typeof data.token === "string" && data.token.length > 0) {
+        helperToken = data.token;
+        await host.storage.set(TOKEN_KEY, data.token);
+      }
+    }
+  } catch {
+    // helper недоступен — токен останется null, кнопка Start покажет ошибку
   }
   render();
 }
