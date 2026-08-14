@@ -47,12 +47,20 @@ async function startDashboard() {
   try {
     const headers = { "Content-Type": "application/json" };
     if (helperToken) headers["X-Hermes-Token"] = String(helperToken);
-    const response = await fetch(HELPER_URL + "start", {
-      method: "POST",
-      cache: "no-store",
-      headers,
-      body: JSON.stringify({})
-    });
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 3_000);
+    let response;
+    try {
+      response = await fetch(HELPER_URL + "start", {
+        method: "POST",
+        cache: "no-store",
+        headers,
+        body: JSON.stringify({}),
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timer);
+    }
     if (response.ok) {
       const data = await response.json();
       if (data.running) {
@@ -67,9 +75,13 @@ async function startDashboard() {
         : "Helper token missing (see README)";
     } else {
       dot.dataset.state = "offline";
+      detailEl.textContent = (locale === "ru" ? "Helper: ошибка " : "Helper error ") + response.status;
     }
   } catch {
     dot.dataset.state = "offline";
+    detailEl.textContent = locale === "ru"
+      ? "Helper не запущен — см. README (автозапуск)"
+      : "Helper not running — see README (autostart)";
   }
   render();
 }
@@ -90,6 +102,7 @@ function render() {
     detailEl.textContent = locale === "ru" ? "Дашборд не запущен" : "Dashboard is not running";
     openButton.disabled = true;
     startButton.hidden = false;
+    startButton.disabled = false;
   } else {
     detailEl.textContent = locale === "ru" ? "Проверка…" : "Checking…";
     openButton.disabled = true;
