@@ -102,5 +102,10 @@ button { font: inherit; border: 0; }
   color: #1e1d27;
 }
 
+.hermes-btn--embed {
+  background: var(--secondary, #d8e1c5);
+  color: #1e1d27;
+}
+
 .hermes-btn:disabled { opacity: 0.45; cursor: default; }
 .hermes-btn:not(:disabled):hover { opacity: 0.88; }

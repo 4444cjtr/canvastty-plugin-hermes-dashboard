@@ -9,6 +9,7 @@ const statusEl = document.querySelector("#status");
 const detailEl = document.querySelector("#detail");
 const openButton = document.querySelector("#open");
 const startButton = document.querySelector("#start");
+const embedButton = document.querySelector("#embed");
 const widget = document.querySelector("#widget");
 
 let locale = "en";
@@ -62,6 +63,21 @@ async function loadToken() {
 
 openButton.addEventListener("click", () => {
   void host.request("external.open", { url: DASHBOARD_URL });
+});
+
+embedButton.addEventListener("click", () => {
+  embedButton.disabled = true;
+  host.request("browser.open", { url: DASHBOARD_URL })
+    .then(() => {
+      embedButton.disabled = false;
+    })
+    .catch(() => {
+      embedButton.disabled = false;
+      detailEl.textContent = locale === "ru"
+        ? "Встроенный браузер недоступен — обновите CanvasTTY"
+        : "Embedded browser unavailable — update CanvasTTY";
+      render();
+    });
 });
 
 startButton.addEventListener("click", () => {
@@ -125,19 +141,23 @@ function render() {
   if (state === "online") {
     detailEl.textContent = locale === "ru" ? "Дашборд запущен" : "Dashboard is running";
     openButton.disabled = false;
+    embedButton.disabled = false;
     startButton.hidden = true;
   } else if (state === "offline") {
     detailEl.textContent = locale === "ru" ? "Дашборд не запущен" : "Dashboard is not running";
     openButton.disabled = true;
+    embedButton.disabled = true;
     startButton.hidden = false;
     startButton.disabled = false;
   } else {
     detailEl.textContent = locale === "ru" ? "Проверка…" : "Checking…";
     openButton.disabled = true;
+    embedButton.disabled = true;
     startButton.hidden = true;
   }
 
-  openButton.textContent = locale === "ru" ? "Открыть дашборд" : "Open Dashboard";
+  openButton.textContent = locale === "ru" ? "Открыть" : "Open";
+  embedButton.textContent = locale === "ru" ? "В CanvasTTY" : "In CanvasTTY";
   startButton.textContent = locale === "ru" ? "Запустить" : "Start";
 }
 

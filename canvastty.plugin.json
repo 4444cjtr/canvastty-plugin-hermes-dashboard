@@ -2,11 +2,15 @@
   "apiVersion": 1,
   "id": "com.hermes.dashboard",
   "name": "Hermes Dashboard",
-  "version": "1.1.0",
-  "description": "Status, launch, and quick-open for the local Hermes Agent dashboard (127.0.0.1:9119).",
+  "version": "1.2.0",
+  "description": "Status, launch, and open (system browser or CanvasTTY embedded) for the local Hermes dashboard.",
   "author": "4444cjtr",
   "homepage": "https://github.com/4444cjtr/canvastty-hermes-dashboard",
-  "permissions": ["external:open", "network", "storage"],
+  "permissions": [
+    "external:open",
+    "network",
+    "storage"
+  ],
   "contributions": [
     {
       "id": "hermes-dashboard",
@@ -14,7 +18,10 @@
       "title": "Hermes Dashboard",
       "description": "Shows whether the local Hermes dashboard is running, starts it, and opens it in your default browser.",
       "entry": "widgets/dashboard.html",
-      "defaultSize": { "columns": 4, "rows": 3 }
+      "defaultSize": {
+        "columns": 4,
+        "rows": 3
+      }
     }
   ]
 }
