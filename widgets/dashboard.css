@@ -75,3 +75,32 @@ button { font: inherit; border: 0; }
 
 .hermes-open:disabled { opacity: 0.45; cursor: default; }
 .hermes-open:not(:disabled):hover { opacity: 0.88; }
+
+.hermes-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.hermes-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.hermes-btn--start {
+  background: var(--ok, #7ec699);
+  color: #1e1d27;
+}
+
+.hermes-btn--open {
+  background: var(--primary);
+  color: #1e1d27;
+}
+
+.hermes-btn:disabled { opacity: 0.45; cursor: default; }
+.hermes-btn:not(:disabled):hover { opacity: 0.88; }
