@@ -145,14 +145,24 @@ async function refresh() {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 2_000);
-    await fetch(DASHBOARD_URL, {
-      method: "GET",
-      cache: "no-store",
-      signal: controller.signal
-    });
-    clearTimeout(timer);
-    dot.dataset.state = "online";
+    let response;
+    try {
+      response = await fetch(HELPER_URL + "status", {
+        method: "GET",
+        cache: "no-store",
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (response.ok) {
+      const data = await response.json();
+      dot.dataset.state = data.running ? "online" : "offline";
+    } else {
+      dot.dataset.state = "offline";
+    }
   } catch {
+    // helper недоступен — считаем офлайн
     dot.dataset.state = "offline";
   }
   render();

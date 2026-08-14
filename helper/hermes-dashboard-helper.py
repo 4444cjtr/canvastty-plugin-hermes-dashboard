@@ -122,16 +122,29 @@ def start_dashboard() -> bool:
 
 
 class Handler(BaseHTTPRequestHandler):
+    def _cors_headers(self) -> None:
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Hermes-Token")
+        self.send_header("Access-Control-Max-Age", "3600")
+
     def _json(self, code: int, payload: dict) -> None:
         body = json.dumps(payload).encode()
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
+        self._cors_headers()
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
 
     def log_message(self, format, *args):  # noqa: A002 — тишина в stdout
         pass
+
+    def do_OPTIONS(self):
+        # Preflight для кросс-ориджин запросов из песочницы плагина
+        self.send_response(204)
+        self._cors_headers()
+        self.end_headers()
 
     def do_GET(self):
         if self.path == "/status":
