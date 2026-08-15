@@ -23,5 +23,8 @@
         "rows": 3
       }
     }
+  ],
+  "platforms": [
+    "canvastty"
   ]
 }
