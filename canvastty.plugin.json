@@ -5,7 +5,7 @@
   "version": "1.3.0",
   "description": "Status and quick-launch for the local Hermes Agent dashboard, opened inside CanvasTTY.",
   "author": "4444cjtr",
-  "homepage": "https://github.com/4444cjtr/canvastty-hermes-dashboard",
+  "homepage": "https://github.com/4444cjtr/canvastty-plugin-hermes-dashboard",
   "permissions": [
     "external:open",
     "network",
